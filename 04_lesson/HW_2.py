@@ -16,5 +16,5 @@ bed = list(int(input()) for _ in range(int(input("Enter N: "))))
 max = bed[-1]+bed[0]+bed[1]
 for i in range(1, len(bed)):
     if bed[i-1]+bed[i]+bed[i+1 if i < len(bed)-1 else 0] > max:
-        max = bed[i-1]+bed[i]+bed[i+1 if i < len(bed)-14 else 0]
+        max = bed[i-1]+bed[i]+bed[i+1 if i < len(bed)-1 else 0]
 print(max)

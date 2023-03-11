@@ -15,7 +15,7 @@
 poem = input().split()
 vowel = 'ёуеыаоэяию'
 result = set(sum(i.lower().count(j) for j in vowel) for i in poem)
-if len(result) == 1:
+if len(result) == 1 and all(result):
     print("Парам пам-пам")
 else:
     print("Пам парам")

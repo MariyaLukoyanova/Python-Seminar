@@ -1,0 +1,100 @@
+# Данная программа была написана силами одного человека и двух котов ^.^
+# На функцию по удалению данных не хватило сил - у нас лапки 
+
+from os import path
+file_base = "base.txt"
+all_data = []
+id = 0
+
+if not path.exists(file_base):
+    with open(file_base, "w", encoding="utf-8") as _:
+        pass
+
+def read_records():
+    global all_data, id
+    with open(file_base, "r", encoding="utf-8") as f:
+        all_data = [i.strip() for i in f]
+    id = int(list(all_data[-1].split())[0])
+    return all_data
+
+print(read_records())
+
+def show_all():
+    if not all_data:
+        print("Нет данных")
+    else:
+        print(*all_data, sep="\n")
+
+def add_record():
+    global all_data, id
+    person = input("Введите ФИО:\n")
+    number = input("Введите телефон:\n")
+    for i in all_data:
+        person_list = list(person.split())
+        i_list = list(i.split())
+        print(person_list)
+        print(i_list)
+        if sum([i_list.count(g) for g in person_list]) == 3:
+            return "Данный человек уже есть в базе"
+        if number in i_list:
+            return "Данный номер уже есть в базе"
+    read_records()
+    all_data.append(str(id+1)+" "+person+" "+number)
+    print(all_data)
+    with open(file_base, "w", encoding="utf-8") as f:
+        for l in all_data:
+            f.write(l + "\n")
+        return("Новый контакт успешно добавлен!")
+
+def re_add():
+    global all_data
+    old_id = str(input("Введите id персонажа, данные которого хотите изменить:\n"))
+    if sum([(list(d.split())).count(old_id) for d in all_data]) == 0:
+        print("Такого id не найено")
+        return
+    new_data = input("Введите новые данные - id, ФИО и телефон:\n")
+    element = [i for i in range(len(all_data)) if old_id == list(all_data[i].split())[0]]
+    all_data[element[0]] = new_data
+    with open(file_base, "w", encoding="utf-8") as f:
+        for l in all_data:
+            f.write(l + "\n")
+    return("Изменения успешно сохранены!")
+
+
+def search_record():
+    info = str(input("Введите id/Фалимилию/Имя/Отчество/телефон для поиска совпадений:\n"))
+    flag = True
+    for i in all_data:
+        if info in list(i.split()):        
+            print(i.strip()+"\n")
+            flag = False
+    if flag:
+        print("Совпадение не найдено!")
+
+def main_menu():
+    play = True
+    while play:
+        answer = input("Phone book:\n"
+                       "1. Show all records\n"
+                       "2. Add a record\n"
+                       "3. Search a record\n"
+                       "4. Modify a record\n"
+                       "5. Exit\n")
+        match answer:
+            case "1":
+                show_all()
+            case "2":
+                print(add_record())
+                show_all()
+            case "3":
+                search_record()
+            case "4":
+                show_all()
+                re_add()
+                show_all() 
+            case "5":
+                play = False
+            case _:
+                print("Try again!\n")
+
+main_menu()
